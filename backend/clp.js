@@ -1,10 +1,15 @@
 const sqlite3 = require('sqlite3').verbose();
 const express = require('express');
+const cors = require('cors'); // Importa o pacote cors
 const app = express();
 const PORT = 3000;
 
+// Habilita CORS para todas as origens
+app.use(cors());
+
 // Conexão com o banco de dados (arquivo local)
 const db = new sqlite3.Database('./estufa.db');
+
 
 // Criação da tabela com ID e TIMESTAMP automático
 db.run(`
@@ -71,7 +76,7 @@ function mostrarUltimosDados() {
 }
 
 // Executa a cada 5 segundos
-setInterval(gerarDadosSimulados, 5000);
+setInterval(gerarDadosSimulados, 600000);
 
 // Endpoint para obter o último registro
 app.get('/dados', (req, res) => {
@@ -85,8 +90,8 @@ app.get('/dados', (req, res) => {
 });
 
 // Inicia o servidor
-app.listen(PORT, 'localhost', () => {
+app.listen(PORT, '0.0.0.0', () => {
   console.log(`Servidor rodando em http://localhost:${PORT}`);
 });
 
-console.log("Simulador de CLP rodando... Inserindo dados a cada 5 segundos.");
+console.log("Simulador de CLP rodando... Inserindo dados a cada 10 minutos.");

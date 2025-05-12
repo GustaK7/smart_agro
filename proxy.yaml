@@ -1,0 +1,7 @@
+targets:
+  $default:
+    builders:
+      build_web_compilers|entrypoint:
+        options:
+          dart2js_args:
+            - --dart-define=FLUTTER_WEB_USE_SKIA=true
