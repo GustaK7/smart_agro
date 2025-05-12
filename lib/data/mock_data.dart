@@ -20,9 +20,8 @@ class MockData {
   final url = Uri.parse('http://localhost:3000/dados');
   try {
     print("Fazendo requisição para: $url");
-    final response = await http.get(url);
+    final response = await http.get(url).timeout(Duration(seconds: 10));
     print("Status Code: ${response.statusCode}");
-    print("Response Body: ${response.body}");
     if (response.statusCode == 200) {
       final Map<String, dynamic> dado = jsonDecode(response.body);
       temperatura = dado['temperatura'] ?? 0.0;
@@ -39,8 +38,8 @@ class MockData {
       registro = "Erro ao buscar dados: ${response.statusCode}";
     }
   } catch (e) {
-    registro = "Erro: $e";
-    print("Erro: $e");
+    registro = "Erro ao buscar dados: ${e.runtimeType} - ${e.toString()}";
+    print("Erro ao buscar dados: $e");
   }
 }
 }

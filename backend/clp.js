@@ -85,7 +85,7 @@ app.get('/dados', (req, res) => {
 });
 
 // Inicia o servidor
-app.listen(PORT, () => {
+app.listen(PORT, 'localhost', () => {
   console.log(`Servidor rodando em http://localhost:${PORT}`);
 });
 
