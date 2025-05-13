@@ -20,18 +20,17 @@ class MockData {
   static bool monitoramentoUmidadeAtiva = false;
 
   // Buscar dados da API
-  static Future<void> fetchDados() async {
-  final url = Uri.parse('https://smart-agro-back.onrender.com/dados');
+static Future<void> fetchDados() async {
+  final url = Uri.parse('http://localhost:3000/dadosone');
   try {
     print("Fazendo requisição para: $url");
     final response = await http.get(url).timeout(Duration(seconds: 10));
     print("Status Code: ${response.statusCode}");
     if (response.statusCode == 200) {
       final Map<String, dynamic> dado = jsonDecode(response.body);
-      
-      // Adicionando ID e Timestamp
+
+      // Atualizando os dados recebidos
       ultimoId = dado['id'] ?? 0;
-      // Atualização dos dados
       temperatura = dado['temperatura'] ?? 0.0;
       umidade = dado['umidade_ar'] ?? 0.0;
       umidadeSolo = dado['umidade_solo'] ?? 0.0;
@@ -44,8 +43,8 @@ class MockData {
       monitoramentoCo2Ativo = dado['monitorar_co2'] == 1;
       monitoramentoUmidadeAtiva = dado['monitorar_umidade_ar'] == 1;
 
-      
-      //ultimaAtualizacao = dado['timestamp'] ?? "Desconhecido";
+      // Atualizando a data e hora
+      ultimaAtualizacao = "${dado['data'] ?? 'Desconhecido'} às ${dado['hora'] ?? 'Desconhecido'}";
 
       registro = "Dados atualizados com sucesso (ID $ultimoId às $ultimaAtualizacao)";
     } else {

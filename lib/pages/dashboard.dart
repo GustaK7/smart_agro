@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'dart:async'; // Necessário para usar Timer
 
 import '../data/mock_data.dart'; // Importa os dados simulados
+import 'dashboard_intervalo.dart'; // Importa a nova página de histórico
 
 class Dashboard extends StatefulWidget {
   const Dashboard({super.key});
@@ -31,7 +32,8 @@ class _DashboardState extends State<Dashboard> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Estufa Inteligente'),
+        title: const Text('Estufa Inteligente',
+            style: TextStyle(color: Colors.white)),
         backgroundColor: Colors.green,
       ),
       body: SingleChildScrollView(
@@ -104,13 +106,22 @@ class _DashboardState extends State<Dashboard> {
             ),
             const SizedBox(height: 16),
 
-            // Card para Registro de Dados
-            buildInfoCard(
-              icon: Icons.article,
-              title: 'Registro de Dados',
-              value: MockData.registro,
-              color: Colors.green,
-              isMultiline: true,
+            // Card para Registro de Dados com navegação
+            InkWell(
+              onTap: () {
+                // Navega para a tela DashboardHistorico
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => const DashboardHistorico()),
+                );
+              },
+              child: buildInfoCard(
+                icon: Icons.article,
+                title: 'Registro de Dados',
+                value: MockData.registro,
+                color: Colors.green,
+                isMultiline: true,
+              ),
             ),
           ],
         ),
