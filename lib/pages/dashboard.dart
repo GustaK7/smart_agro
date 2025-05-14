@@ -2,7 +2,8 @@ import 'package:flutter/material.dart';
 import 'dart:async'; // Necessário para usar Timer
 
 import '../data/mock_data.dart'; // Importa os dados simulados
-import 'dashboard_intervalo.dart'; // Importa a nova página de histórico
+import 'dashboard_intervalo.dart'; // Importa a página de histórico
+import 'dashboard_temperatura.dart'; // Importa a página de temperatura
 
 class Dashboard extends StatefulWidget {
   const Dashboard({super.key});
@@ -41,16 +42,49 @@ class _DashboardState extends State<Dashboard> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            // Card para Temperatura com Ventilador
-            buildInfoCard(
-              icon: Icons.thermostat,
-              title: 'Temperatura',
-              value: '${MockData.temperatura.toStringAsFixed(1)}°C',
-              color: Colors.orange,
-              child: buildDeviceStatus(
-                icon: Icons.air,
-                title: 'Ventilador',
-                ativo: MockData.ventiladorAtivo,
+            // Card para Temperatura com Ventilador e navegação para DashboardTemperatura
+            InkWell(
+              onTap: () {
+                // Navega para a tela DashboardTemperatura
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => const DashboardTemperatura()),
+                );
+              },
+              child: buildInfoCard(
+                icon: Icons.thermostat,
+                title: 'Temperatura',
+                value: '${MockData.temperatura.toStringAsFixed(1)}°C',
+                color: Colors.orange,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    buildDeviceStatus(
+                      icon: Icons.air,
+                      title: 'Ventilador',
+                      ativo: MockData.ventiladorAtivo,
+                    ),
+                    const SizedBox(height: 8),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: [
+                        const Text(
+                          'Ver detalhes',
+                          style: TextStyle(
+                            color: Colors.orange,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                        const SizedBox(width: 4),
+                        Icon(
+                          Icons.arrow_forward,
+                          color: Colors.orange,
+                          size: 16,
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
               ),
             ),
             const SizedBox(height: 16),
@@ -121,6 +155,24 @@ class _DashboardState extends State<Dashboard> {
                 value: MockData.registro,
                 color: Colors.green,
                 isMultiline: true,
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    const Text(
+                      'Ver histórico',
+                      style: TextStyle(
+                        color: Colors.green,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    const SizedBox(width: 4),
+                    Icon(
+                      Icons.arrow_forward,
+                      color: Colors.green,
+                      size: 16,
+                    ),
+                  ],
+                ),
               ),
             ),
           ],

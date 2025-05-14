@@ -80,7 +80,7 @@ function gerarDadosSimulados() {
     function (err) {
       if (err) return console.error("Erro ao inserir:", err.message);
       console.log(`[${new Date().toLocaleTimeString()}] Dados inseridos com ID ${this.lastID}`);
-      mostrarUltimosDados(); // Mostra os últimos registros após inserção
+      //mostrarUltimosDados(); // Mostra os últimos registros após inserção
     }
   );
 }
@@ -161,6 +161,56 @@ app.get('/dadosdatamedia', (req, res) => {
     avg(umidade_solo) as umidade_solo,
     avg(luminosidade) as luminosidade,
     avg(co2) as co2 
+  FROM leituras 
+    WHERE data BETWEEN ? AND ? 
+    ORDER BY id DESC
+  `;
+
+  db.all(query, [dataInicio, dataFim], (err, rows) => {
+    if (err) {
+      return res.status(500).json({ error: err.message });
+    }
+    res.json(rows); // Retorna todos os registros no intervalo
+  });
+});
+
+app.get('/dadosdatatemperatura', (req, res) => {
+  const { dataInicio, dataFim } = req.query;
+
+  // Verificação simples dos parâmetros
+  if (!dataInicio || !dataFim) {
+    return res.status(400).json({ error: 'Parâmetros dataInicio e dataFim são obrigatórios.' });
+  }
+ const query = `
+  SELECT 
+    temperatura,
+    ventilador,
+    data,
+    hora 
+  FROM leituras 
+    WHERE data BETWEEN ? AND ? 
+    ORDER BY id DESC
+  `;
+
+  db.all(query, [dataInicio, dataFim], (err, rows) => {
+    if (err) {
+      return res.status(500).json({ error: err.message });
+    }
+    res.json(rows); // Retorna todos os registros no intervalo
+  });
+});
+
+app.get('/dadostemperaturamedia', (req, res) => {
+  const { dataInicio, dataFim } = req.query;
+
+  // Verificação simples dos parâmetros
+  if (!dataInicio || !dataFim) {
+    return res.status(400).json({ error: 'Parâmetros dataInicio e dataFim são obrigatórios.' });
+  }
+
+  const query = `
+  SELECT 
+    avg(temperatura) as temperatura
   FROM leituras 
     WHERE data BETWEEN ? AND ? 
     ORDER BY id DESC
