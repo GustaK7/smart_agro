@@ -84,7 +84,7 @@ function gerarDadosSimulados() {
     }
   );
 }
-
+/*
 // Exibe os últimos 5 registros inseridos
 function mostrarUltimosDados() {
   db.all("SELECT * FROM leituras ORDER BY id DESC LIMIT 5", (err, rows) => {
@@ -92,9 +92,10 @@ function mostrarUltimosDados() {
     console.table(rows);
   });
 }
+*/
 
-// Executa a cada 1 minutos
-setInterval(gerarDadosSimulados, 60000);
+// Executa a cada 6 minutos
+setInterval(gerarDadosSimulados, 360000);
 
 // Endpoint para obter o último registro
 app.get('/dadosone', (req, res) => {

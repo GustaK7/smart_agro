@@ -67,7 +67,7 @@ class _DashboardHistoricoState extends State<DashboardHistorico> {
             if (carregando)
               const CircularProgressIndicator()
             else ...[
-              if (MockDataMedia.mediaLeitura != null)
+              if (MockDataMedia.mediaLeitura != false)
                 Padding(
                   padding: const EdgeInsets.symmetric(vertical: 14),
                   child: Wrap(
