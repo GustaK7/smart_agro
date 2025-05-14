@@ -18,17 +18,20 @@ class _DashboardHistoricoState extends State<DashboardHistorico> {
   DateTime? dataFim;
   bool carregando = false;
 
-  Future<void> buscarDados() async {
-    if (dataInicio == null || dataFim == null) return;
-    setState(() => carregando = true);
+ Future<void> buscarDados() async {
+  if (dataInicio == null || dataFim == null) return;
+  setState(() => carregando = true);
 
-    await MockDataMedia.carregarMedia(
-      DateFormat('yyyy-MM-dd').format(dataInicio!),
-      DateFormat('yyyy-MM-dd').format(dataFim!),
-    );
+  String inicio = DateFormat('yyyy-MM-dd').format(dataInicio!);
+  String fim = DateFormat('yyyy-MM-dd').format(dataFim!);
 
-    setState(() => carregando = false);
-  }
+  // Carregar dados E médias
+  await MockDataIntervalo.carregarDados(inicio, fim);
+  await MockDataMedia.carregarMedia(inicio, fim);
+
+  setState(() => carregando = false);
+}
+
 
   @override
   Widget build(BuildContext context) {
@@ -64,7 +67,7 @@ class _DashboardHistoricoState extends State<DashboardHistorico> {
             if (carregando)
               const CircularProgressIndicator()
             else ...[
-              if (MockDataMedia.mediaLeitura != true)
+              if (MockDataMedia.mediaLeitura != null)
                 Padding(
                   padding: const EdgeInsets.symmetric(vertical: 14),
                   child: Wrap(

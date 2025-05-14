@@ -52,7 +52,7 @@ class Leitura {
 /// Serviço de API para buscar dados do backend.
 class ApiService {
   static Future<List<Leitura>> buscarLeiturasPorData(String dataInicio, String dataFim) async {
-    final url = Uri.parse('http://10.10.10.205:3000/dadosdata?dataInicio=$dataInicio&dataFim=$dataFim');
+    final url = Uri.parse('http://localhost:3000/dadosdata?dataInicio=$dataInicio&dataFim=$dataFim');
 
     try {
       final response = await http.get(url).timeout(Duration(seconds: 10));

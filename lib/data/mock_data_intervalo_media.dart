@@ -32,21 +32,33 @@ class MediaLeitura {
 /// Serviço de API para buscar médias das leituras.
 class ApiService {
   static Future<MediaLeitura> buscarMediaPorData(String dataInicio, String dataFim) async {
-    final url = Uri.parse('http://localhost:3000/dadosdatamedia?dataInicio=$dataInicio&dataFim=$dataFim');
+  final url = Uri.parse('http://localhost:3000/dadosdatamedia?dataInicio=$dataInicio&dataFim=$dataFim');
 
-    try {
-      final response = await http.get(url).timeout(Duration(seconds: 10));
+  try {
+    final response = await http.get(url).timeout(Duration(seconds: 10));
 
-      if (response.statusCode == 200) {
-        final Map<String, dynamic> dados = jsonDecode(response.body);
-        return MediaLeitura.fromJson(dados);
+    if (response.statusCode == 200) {
+      final decoded = jsonDecode(response.body);
+
+      if (decoded is List) {
+        if (decoded.isNotEmpty && decoded.first is Map<String, dynamic>) {
+          return MediaLeitura.fromJson(decoded.first);
+        } else {
+          throw Exception('Lista vazia ou com formato inválido');
+        }
+      } else if (decoded is Map<String, dynamic>) {
+        return MediaLeitura.fromJson(decoded);
       } else {
-        throw Exception('Erro na requisição: ${response.statusCode}');
+        throw Exception('Resposta inesperada do servidor: $decoded');
       }
-    } catch (e) {
-      throw Exception('Erro ao buscar dados: $e');
+    } else {
+      throw Exception('Erro na requisição: ${response.statusCode}');
     }
+  } catch (e) {
+    throw Exception('Erro ao buscar dados: $e');
   }
+}
+
 }
 
 /// Classe para armazenar as médias carregadas e exibir no Dashboard.
